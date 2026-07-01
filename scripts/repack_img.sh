@@ -43,11 +43,8 @@ for part in "${PARTITIONS[@]}"; do
             
             if [ "$capabilities" != "0x0" ] && [ "$capabilities" != "0x00000000" ]; then
                 cap_bin=$(echo "${capabilities}" | sed 's|^0x||')
-                if command -v xxd &> /dev/null; then
-                    echo "$cap_bin" | xxd -r -p | sudo setfattr -hn security.capability -v - "$local_path" 2>/dev/null
-                else
-                    sudo python3 -c "import sys; sys.stdout.buffer.write(bytes.fromhex('$cap_bin'))" | sudo setfattr -hn security.capability -v - "$local_path" 2>/dev/null
-                fi
+                
+                echo "$cap_bin" | xxd -r -p | sudo setfattr -hn security.capability -v - "$local_path" 2>/dev/null
             fi
         fi
     done < "$UNIFIED_CONFIG"

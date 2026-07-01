@@ -20,12 +20,6 @@ if [ -f "$NO_EXT_FILE" ]; then
     return 0  # Использован return вместо exit
 fi
 
-# 2. Проверка samloader
-if ! command -v samloader &> /dev/null; then
-    echo "[!] samloader CLI not found. Installing via pip..."
-    pip3 install git+https://github.com/ananjaser1211/samloader.git --upgrade &> /dev/null
-fi
-
 # 3. Сборка команды
 SAM_CMD="samloader -m $MODEL -r $REGION"
 if [ -n "$IMEI" ]; then
