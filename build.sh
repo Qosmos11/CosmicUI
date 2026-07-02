@@ -11,7 +11,7 @@ source "./scripts/check_deps.sh"
 # ====================================================
 # STEP 1: BASE ROM (Donor)
 # ====================================================
-source "./source/$BASE.sh"
+source "./source/$BASE/config.sh"
 CURRENT_MODE="$BASE"
 source "./config.sh"              # <-- Dynamically maps configuration to donor node directories
 source "./scripts/download_fw.sh"

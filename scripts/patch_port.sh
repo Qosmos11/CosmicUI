@@ -62,6 +62,8 @@ apply_mod_layer() {
 # ====================================================
 
 # Слой 1: Глобальные моды для всех устройств (корень кухни)
+apply_mod_layer "./source/$BASE/patches" "Source Specific Mods"
+
 apply_mod_layer "./mods" "Global Kitchen Mods"
 
 # Слой 2: Общие моды конкретно для твоего девайса (a55)
