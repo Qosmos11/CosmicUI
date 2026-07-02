@@ -13,18 +13,8 @@ if [ -f "$FINAL_ZIP" ]; then
     return 0  # Использован return вместо exit
 fi
 
-if [ -f "$NO_EXT_FILE" ]; then
-    echo "[+] Found decrypted base without extension. Converting to firmware.zip..."
-    mv "$NO_EXT_FILE" "$FINAL_ZIP"
-    echo -e "${CL_GRN}[+] Firmware successfully prepared: $FINAL_ZIP${CL_RST}"
-    return 0  # Использован return вместо exit
-fi
-
 # 3. Сборка команды
-SAM_CMD="samloader -m $MODEL -r $REGION"
-if [ -n "$IMEI" ]; then
-    SAM_CMD="$SAM_CMD -i $IMEI"
-fi
+SAM_CMD="-m $MODEL -r $REGION"
 
 # 4. Проверка версии
 VERSION_TO_DOWNLOAD=""
@@ -33,7 +23,7 @@ if [ -n "$VERSION" ]; then
     VERSION_TO_DOWNLOAD="$VERSION"
 else
     echo "[!] No specific version provided. Fetching latest available build..."
-    VERSION_TO_DOWNLOAD=$($SAM_CMD checkupdate)
+    VERSION_TO_DOWNLOAD=$(samloader checkupdate $SAM_CMD)
     if [ -z "$VERSION_TO_DOWNLOAD" ]; then
         echo -e "${CL_RED}[-] Error: Failed to fetch version info.${CL_RST}"
         return 1
@@ -43,22 +33,11 @@ fi
 
 # 5. Скачивание
 echo "[+] Starting download..."
-$SAM_CMD download -v "$VERSION_TO_DOWNLOAD" -o "$TMP_ENC_FILE"
-
-# 6. Расшифровка
-if [ -f "$TMP_ENC_FILE" ]; then
-    echo "[+] Decrypting firmware package on-the-fly..."
-    $SAM_CMD decrypt -v "$VERSION_TO_DOWNLOAD" -i "$TMP_ENC_FILE" -o "$FINAL_ZIP"
-    rm -f "$TMP_ENC_FILE"
-fi
-
-if [ -f "$NO_EXT_FILE" ] && [ ! -f "$FINAL_ZIP" ]; then
-    mv "$NO_EXT_FILE" "$FINAL_ZIP"
-fi
+samloader download $SAM_CMD -v "$VERSION_TO_DOWNLOAD" -o "$FINAL_ZIP"
 
 # 7. Проверка результата
 if [ -f "$FINAL_ZIP" ]; then
-    echo -e "${CL_GRN}[+] Firmware successfully downloaded and decrypted: $FINAL_ZIP${CL_RST}"
+    echo -e "${CL_GRN}[+] Firmware successfully downloaded: $FINAL_ZIP${CL_RST}"
 else
     echo -e "${CL_RED}[-] Error: Output firmware.zip not found.${CL_RST}"
     return 1

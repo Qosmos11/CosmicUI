@@ -14,12 +14,23 @@ elif command -v zypper  &>/dev/null; then PKG_MAN="sudo zypper install -y"
 elif command -v yum     &>/dev/null; then PKG_MAN="sudo yum install -y"
 else echo "Unsupported OS"; exit 1; fi
 
-
-if ! command -v samloader &> /dev/null; then
-    pip3 install git+https://github.com/ananjaser1211/samloader.git --upgrade &> /dev/null
-fi
 if ! command -v lz4 &> /dev/null; then
     $PKG_MAN lz4
+fi
+
+if ! command -v wget &> /dev/null; then
+    $PKG_MAN wget
+fi
+
+if command -v samloader &> /dev/null; then
+    echo -e "${CL_RED}Make sure you are running samloader-rs${CL_RST}"
+fi
+
+if ! command -v samloader &> /dev/null; then
+    wget https://github.com/topjohnwu/samloader-rs/releases/download/2.0.0/samloader-v2.0.0-linux-x86_64.tar.xz
+    tar -xf samloader-v2.0.0-linux-x86_64.tar.xz
+    sudo mv samloader /usr/local/bin/
+    rm -rf samloader-v2.0.0-linux-x86_64.tar.xz
 fi
 
 if ! command -v unzip &> /dev/null; then

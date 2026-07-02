@@ -21,8 +21,6 @@ NODE_DIR="$WORK_DIR/firmwares/$CURRENT_MODE"
 
 DOWNLOAD_DIR="$NODE_DIR/downloads"
 FINAL_ZIP="$DOWNLOAD_DIR/firmware.zip"
-TMP_ENC_FILE="$DOWNLOAD_DIR/downloaded_base.enc4"
-NO_EXT_FILE="$DOWNLOAD_DIR/downloaded_base"
 
 UNPACK_DIR="$NODE_DIR/unpacked"
 SUPER_IMG="$UNPACK_DIR/super.img"
