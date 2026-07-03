@@ -5,6 +5,7 @@
 
 echo -e "${CL_YEL}>>> Module repack_img: Stamping Production Metadata & Packing EROFS...${CL_RST}"
 
+sudo rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 PARTITIONS=($(find "$PORT_ROOTFS" -maxdepth 1 -mindepth 1 -type d -exec basename {} \; 2>/dev/null))
