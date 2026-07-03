@@ -23,7 +23,7 @@ if [ -n "$VERSION" ]; then
     VERSION_TO_DOWNLOAD="$VERSION"
 else
     echo "[!] No specific version provided. Fetching latest available build..."
-    VERSION_TO_DOWNLOAD=$(samloader checkupdate $SAM_CMD)
+    VERSION_TO_DOWNLOAD=$(samloader check-update $SAM_CMD)
     if [ -z "$VERSION_TO_DOWNLOAD" ]; then
         echo -e "${CL_RED}[-] Error: Failed to fetch version info.${CL_RST}"
         return 1
