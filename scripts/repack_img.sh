@@ -1,9 +1,4 @@
 #!/bin/bash
-# scripts/repack_img.sh — Native Metadata Stamper & EROFS Packer
-
-[ -z "$TARGET" ] && { echo -e "${CL_RED}[-] Error: Run via build.sh${CL_RST}"; return 1; }
-
-echo -e "${CL_YEL}>>> Module repack_img: Stamping Production Metadata & Packing EROFS...${CL_RST}"
 
 sudo rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
@@ -19,10 +14,8 @@ for part in "${PARTITIONS[@]}"; do
         continue
     fi
 
-    echo -e "${CL_CYN}[*] Processing partition: [$part]...${CL_RST}"
+    echo "Processing partition: [$part]"
     rm -f "$IMG_OUTPUT"
-
-    echo "    -> Applying secure metadata layer directly to files..."
     while IFS="|" read -r r_path uid gid mode selinux_ctx capabilities; do
         [ -z "$r_path" ] && continue
         
@@ -50,7 +43,7 @@ for part in "${PARTITIONS[@]}"; do
         fi
     done < "$UNIFIED_CONFIG"
 
-    echo "    -> Compressing and baking final EROFS image via LZ4HC..."
+    echo "Building image..."
     sudo mkfs.erofs \
         -z lz4hc,9 \
         -b 4096 \
@@ -59,14 +52,12 @@ for part in "${PARTITIONS[@]}"; do
         "$IMG_OUTPUT" "$SRC_SUBDIR/" &> /dev/null
         
     if [ -f "$IMG_OUTPUT" ] && [ -s "$IMG_OUTPUT" ]; then
-        echo -e "${CL_GRN}    [+] Done! Baked: $IMG_OUTPUT ($(du -sh "$IMG_OUTPUT" | awk '{print $1}'))${CL_RST}"
+        echo "Done!"
     else
-        echo -e "${CL_RED}    [-] Error: Packaging failed for $part.${CL_RST}"
+        echo "Error!"
     fi
 done
 
-echo -e "${CL_CYN}[*] Mirroring companion standalone images to output folder...${CL_RST}"
 find "$PORT_DIR" -maxdepth 1 -type f -name "*.img" -exec cp {} "$OUTPUT_DIR/" \; 2>/dev/null
 
-echo -e ""
-echo -e "${CL_GRN}[+] ALL HYBRID IMAGES SUCCESSFULLY COMPRESSED! Check: $OUTPUT_DIR${CL_RST}"
+echo "All img are repacked"
