@@ -5,6 +5,7 @@ mkdir -p "$DOWNLOAD_DIR"
 
 if [ -f "$FINAL_ZIP" ]; then
     echo "Firmware package already exists"
+    return 0
 fi
 
 SAM_CMD="-m $MODEL -r $REGION"
