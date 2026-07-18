@@ -6,7 +6,7 @@ BASE=$2
 source "./config.sh"
 source "./scripts/check_deps.sh"
 
-source "./source/$BASE/config.sh"
+source "./target/$TARGET/$BASE.sh"
 CURRENT_MODE="$BASE"
 source "./config.sh"
 source "./scripts/download_fw.sh"
