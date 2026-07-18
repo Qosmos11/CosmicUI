@@ -1,5 +1,4 @@
-# source/s24fe.sh
 MODEL="SM-S721B"
 REGION="EUX"
-VERSION="" 
-IMEI="351273090276500"
+VERSION=""
+BASE_MODS=("lhbm-fix")
