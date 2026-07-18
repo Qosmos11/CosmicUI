@@ -11,9 +11,9 @@ if [ -d "$DONOR_UNPACK" ]; then
     find "$DONOR_UNPACK" -maxdepth 1 -type f -name "*.img" ! -name "super.img" ! -name "super.img.raw" -exec cp {} "$PORT_DIR/" \; 2>/dev/null
 fi
 
-MODS_LIST=( "${BASE_MODS[@]}" "${TARGET_MODS[@]}"
+MODS_LIST=("${BASE_MODS[@]}" "${TARGET_MODS[@]}")
 
-for mod_path in "${MODS_LIST[@]}"; 
+for mod_path in "${MODS_LIST[@]}"; do
     mod_dir="./mods/$mod_path"
     if [ -d "$mod_dir" ]; then
         for custom_cfg in "$mod_dir"/unified_config-*; do
@@ -26,9 +26,10 @@ for mod_path in "${MODS_LIST[@]}";
              fi
         done
         if [ -f "$mod_dir/patch.sh" ]; then
-            echo "Applying module: $mod_sub_name"
+            echo "Applying module: $mod_path"
             STOCK_META_DIR="$STOCK_META"
             source "$mod_dir/patch.sh"
         fi
-
+    fi
+done
 echo "All mods are done!"
